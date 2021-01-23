@@ -81,14 +81,14 @@ contains(CONFIG,hybris) {
     include( common-config.pri )
 
     PKGCONFIGFILES.files = sensord-qt5.pc
-    PKGCONFIGFILES.commands = 'sed -i "s/Version:.*/Version: $$PC_VERSION/" $$_PRO_FILE_PWD_/sensord-qt5.pc'
+    PKGCONFIGFILES.commands = 'sed -i "s/Version:.*/Version: $$PC_VERSION/" $$_PRO_FILE_PWD_/sensord-qt5.pc.in'
     QTCONFIGFILES.path = /usr/share/qt5/mkspecs/features
 }
 
 
 
 # How to make this work in all cases?
-#PKGCONFIGFILES.commands = sed -i \"s/Version:.*$$/Version: `head -n1 debian/changelog | cut -f 2 -d\' \' | tr -d \'()\'`/\" sensord-qt5.pc
+#PKGCONFIGFILES.commands = sed -i \"s/Version:.*$$/Version: `head -n1 debian/changelog | cut -f 2 -d\' \' | tr -d \'()\'`/\" sensord-qt5.pc.in
 
 
 !contains(CONFIG,hybris) {
