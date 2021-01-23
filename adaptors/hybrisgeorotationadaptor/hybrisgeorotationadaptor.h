@@ -2,8 +2,6 @@
 **
 ** Copyright (C) 2013 Jolla Ltd
 **
-** Copyright (C) 2016 kimmoli
-**
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 **
@@ -19,50 +17,43 @@
 **
 ****************************************************************************/
 
-#ifndef HYBRISSTEPCOUNTERADAPTOR_H
-#define HYBRISSTEPCOUNTERADAPTOR_H
+#ifndef HYBRISGEOROTATIONADAPTOR_H
+#define HYBRISGEOROTATIONADAPTOR_H
 #include "hybrisadaptor.h"
 
 #include <QString>
 #include <QStringList>
-#include <linux/input.h>
 #include "deviceadaptorringbuffer.h"
 #include "datatypes/orientationdata.h"
-#include <QTime>
 
 /**
- * @brief Adaptor for hybris step counter sensor.
+ * @brief Adaptor for hybris compass.
  *
- * Adaptor for step counter sensor. 
- *
- * Returns the number of steps taken by the user since
- * the last reboot while activated. The value is returned as a uint64_t and is
- * reset to zero only on a system reboot.
- *
+ * Adaptor for internal compass
+ * Uses hybris sensor daemon driver interface in interval
+ * polling mode, i.e. values are read with given constant interval.
  */
-class HybrisStepCounterAdaptor : public HybrisAdaptor
+class HybrisGeoRotationAdaptor : public HybrisAdaptor
 {
     Q_OBJECT
 
 public:
     static DeviceAdaptor* factoryMethod(const QString& id) {
-        return new HybrisStepCounterAdaptor(id);
+        return new HybrisGeoRotationAdaptor(id);
     }
-    HybrisStepCounterAdaptor(const QString& id);
-    ~HybrisStepCounterAdaptor();
+    HybrisGeoRotationAdaptor(const QString& id);
+    ~HybrisGeoRotationAdaptor();
 
     bool startSensor();
     void stopSensor();
-
-    void sendInitialData();
 
 protected:
     void processSample(const sensors_event_t& data);
     void init();
 
 private:
-    DeviceAdaptorRingBuffer<TimedUnsigned>* buffer;
-    QByteArray powerStatePath;
+    DeviceAdaptorRingBuffer<CompassData>* m_buffer;
+    QByteArray m_powerStatePath;
 
 };
 #endif

@@ -17,14 +17,14 @@
 **
 ****************************************************************************/
 
-#include "hybrismagnetometeradaptorplugin.h"
-#include "hybrismagnetometeradaptor.h"
+#include "hybrisrotationadaptorplugin.h"
+#include "hybrisrotationadaptor.h"
 #include "sensormanager.h"
 #include "logging.h"
 
-void HybrisMagnetometerAdaptorPlugin::Register(class Loader&)
+void HybrisRotationAdaptorPlugin::Register(class Loader&)
 {
-    sensordLogD() << "registering hybrismagnetometeradaptor";
+    sensordLogD() << "registering hybrisrotationadaptor";
     SensorManager& sm = SensorManager::instance();
-    sm.registerDeviceAdaptor<HybrisMagnetometerAdaptor>("magnetometeradaptor");
+    sm.registerDeviceAdaptor<HybrisRotationAdaptor>("orientationadaptor");
 }

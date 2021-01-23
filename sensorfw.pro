@@ -27,11 +27,14 @@ SUBDIRS = datatypes \
           examples
 
 contains(CONFIG,configs) {
-   # !contains(CONFIG,hybris) {
+    contains(CONFIG,hybris) {
         SENSORDHYBRISCONFIGFILE.files = config/sensord-hybris.conf
         SENSORDHYBRISCONFIGFILE.path = /etc/sensorfw
         INSTALLS += SENSORDHYBRISCONFIGFILE
-    # }
+    }
+
+    contains(CONFIG,legacy) {
+
         SENSORFWCONFIGFILES.files = config/sensord-rx_51.conf \
                config/sensord-oaktrail.conf \
                config/sensord-exopc.conf \
@@ -46,12 +49,14 @@ contains(CONFIG,configs) {
                config/sensord-u8500.conf \
 
         SENSORFWCONFIGFILES.path = /etc/sensorfw
+        INSTALLS += SENSORFWCONFIGFILES
+    }
 
     SENSORCONFIG_SETUP.files = config/sensord-daemon-conf-setup
     SENSORCONFIG_SETUP.path = /usr/bin
 
-     INSTALLS +=  SENSORFWCONFIGFILES SENSORCONFIG_SETUP
- }
+    INSTALLS += SENSORCONFIG_SETUP
+}
 
 contains(CONFIG,hybris) {
 
@@ -65,7 +70,7 @@ contains(CONFIG,hybris) {
     publicheaders.files += include/*.h
 
     INSTALLS += PKGCONFIGFILES QTCONFIGFILES
-    PKGCONFIGFILES.path = /usr/lib/pkgconfig
+    PKGCONFIGFILES.path = $$[QT_INSTALL_LIBS]/pkgconfig
     QTCONFIGFILES.files = sensord.prf
 
     qt-api.depends = datatypes
@@ -96,7 +101,11 @@ contains(CONFIG,hybris) {
     SENSORDCONFIGFILES.files += config/20-sensors-default.conf
     SENSORDCONFIGFILES.path = /etc/sensorfw/sensord.conf.d
     INSTALLS += SENSORDCONFIGFILES
+}
 
+contains(CONFIG,systemdunit) {
+    # Install service files through packaging to take into account
+    # units file location unless called with CONFIG+=systemdunit
     SENSORSYSTEMD.files = rpm/sensorfwd.service
     SENSORSYSTEMD.path = /lib/systemd/system
     INSTALLS += SENSORSYSTEMD

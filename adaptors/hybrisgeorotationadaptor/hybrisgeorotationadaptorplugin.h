@@ -17,14 +17,18 @@
 **
 ****************************************************************************/
 
-#include "hybrismagnetometeradaptorplugin.h"
-#include "hybrismagnetometeradaptor.h"
-#include "sensormanager.h"
-#include "logging.h"
+#ifndef HYBRISGEOROTATIONADAPTORPLUGIN_H
+#define HYBRISGEOROTATIONADAPTORPLUGIN_H
 
-void HybrisMagnetometerAdaptorPlugin::Register(class Loader&)
+#include "plugin.h"
+
+class HybrisGeoRotationAdaptorPlugin : public Plugin
 {
-    sensordLogD() << "registering hybrismagnetometeradaptor";
-    SensorManager& sm = SensorManager::instance();
-    sm.registerDeviceAdaptor<HybrisMagnetometerAdaptor>("magnetometeradaptor");
-}
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "com.nokia.SensorService.Plugin/1.0")
+
+private:
+    void Register(class Loader& l);
+};
+
+#endif
