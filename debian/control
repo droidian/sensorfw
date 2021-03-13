@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Lorn Potter <lorn.potter@gmail.com>
 Uploaders: 
 Build-Depends: debhelper (>=5),
-               qt5-default,
+               qtbase5-dev,
                libudev-dev,
                libsystemd-dev,
                doxygen,
