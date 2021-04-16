@@ -1,1 +1,2 @@
 /usr/lib/sensord-qt5
+/lib/systemd/system/sensorfwd.service.d
