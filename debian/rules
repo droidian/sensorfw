@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+include /usr/share/dpkg/default.mk
+
 # some commonly used local vars
 comma:= ,
 empty:=
@@ -60,6 +62,8 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
+	sed "s|@LIB@|lib/$(DEB_HOST_MULTIARCH)|g" $(CURDIR)/sensord-qt5.pc.in > $(CURDIR)/sensord-qt5.pc
+	sed "s|@LIBDIR@/sensord|/usr/lib/$(DEB_HOST_MULTIARCH)/sensord-qt5|g" $(CURDIR)/tests/tests.xml.in > $(CURDIR)/tests/tests.xml
 	cd $(BUILD_DIR) && $(MAKE) $(MAKE_PARALLEL_PARAMS)
 
 	touch $@
@@ -73,6 +77,8 @@ clean:
 	rm -r -f $(BUILD_DIR)
 	rm -f -r debian/tmp
 
+	rm -f $(CURDIR)/sensord-qt5.pc $(CURDIR)/tests/tests.xml
+
 	dh_clean
 
 install: build
@@ -83,6 +89,9 @@ install: build
 
 	# Add here commands to install the package into debian/tmp.
 	cd $(BUILD_DIR) && $(MAKE) INSTALL_ROOT=$(CURDIR)/debian/tmp $(MAKE_PARALLEL_PARAMS) install
+	# Workaround a qmake issue experienced on arch-dep builds
+	/usr/lib/qt5/bin/qmake -install qinstall \
+		$(CURDIR)/sensord-qt5.pc $(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/sensord-qt5.pc
 
 # Build architecture-independent files here.
 binary-indep: build install
