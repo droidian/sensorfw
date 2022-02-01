@@ -1,7 +1,6 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Jolla Ltd
-** Contact: lorn.potter@jollamobile.com
 **
 **
 ** $QT_BEGIN_LICENSE:LGPL$
@@ -94,8 +93,4 @@ void HybrisOrientationAdaptor::processSample(const sensors_event_t& data)
 
     buffer->commit();
     buffer->wakeUpReaders();
-}
-
-void HybrisOrientationAdaptor::init()
-{
 }

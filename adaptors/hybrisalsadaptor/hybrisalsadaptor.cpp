@@ -1,7 +1,6 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Jolla Ltd
-** Contact: lorn.potter@jollamobile.com
 **
 **
 ** $QT_BEGIN_LICENSE:LGPL$
@@ -136,8 +135,4 @@ void HybrisAlsAdaptor::processSample(const sensors_event_t& data)
     lastLightValue = d->value_;
     buffer->commit();
     buffer->wakeUpReaders();
-}
-
-void HybrisAlsAdaptor::init()
-{
 }

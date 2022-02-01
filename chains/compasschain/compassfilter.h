@@ -1,7 +1,6 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Jolla Ltd
-** Contact: lorn.potter@jollamobile.com
 
    This file is part of Sensord.
 
@@ -49,8 +48,6 @@ private:
     void magDataAvailable(unsigned, const CalibratedMagneticFieldData*);
     void accelDataAvailable(unsigned, const AccelerationData*);
 
-    CalibratedMagneticFieldData magData;
-
     qreal magX;
     qreal magY;
     qreal magZ;
@@ -60,10 +57,6 @@ private:
 
     int level;
     qreal oldHeading;
-    QList <int> averagingBuffer;
-    QList <const CalibratedMagneticFieldData *> magAvgBuffer;
-    QList <const AccelerationData *> accelAvgBuffer;
-//    MagAvgBuffer magAvgBuffer;
 };
 
 #endif

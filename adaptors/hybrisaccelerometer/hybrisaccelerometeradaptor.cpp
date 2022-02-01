@@ -1,7 +1,6 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Jolla Ltd
-** Contact: lorn.potter@jollamobile.com
 **
 **
 ** $QT_BEGIN_LICENSE:LGPL$
@@ -22,8 +21,6 @@
 #include "logging.h"
 #include "datatypes/utils.h"
 #include "config.h"
-
-#define GRAVITY_RECIPROCAL_THOUSANDS 101.971621298
 
 HybrisAccelerometerAdaptor::HybrisAccelerometerAdaptor(const QString& id) :
     HybrisAdaptor(id,SENSOR_TYPE_ACCELEROMETER)
@@ -78,9 +75,3 @@ void HybrisAccelerometerAdaptor::processSample(const sensors_event_t& data)
     buffer->commit();
     buffer->wakeUpReaders();
 }
-
-//void HybrisAccelerometerAdaptor::init()
-//{
-////    introduceAvailableDataRange(DataRange(-HybrisAdaptor::maxRange, HybrisAdaptor::maxRange , 1));
-////    introduceAvailableInterval(DataRange(10, 586, 0));
-//}

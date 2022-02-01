@@ -1,8 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 ##
 ## Copyright (C) 2009-2010 Nokia Corporation
-##
-## Contact: Ustun Ergenoglu <ext-ustun.ergenoglu@nokia.com>
 ##
 ## This file is part of Sensord.
 ##

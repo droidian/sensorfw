@@ -1,10 +1,8 @@
 /****************************************************************************
 **
 ** Copyright (C) 2013 Jolla Ltd
-** Contact: lorn.potter@jollamobile.com
 **
 ** Copyright (C) 2017 Matti Lehtimäki
-** Contact: matti.lehtimaki@gmail.com
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 **
@@ -76,8 +74,4 @@ void HybrisPressureAdaptor::processSample(const sensors_event_t& data)
 #endif
     buffer->commit();
     buffer->wakeUpReaders();
-}
-
-void HybrisPressureAdaptor::init()
-{
 }
