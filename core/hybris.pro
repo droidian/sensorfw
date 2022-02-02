@@ -25,6 +25,7 @@ LIBS += -L$$[QT_INSTALL_LIBS] -L../datatypes
 } else {
     INCLUDEPATH += /usr/include/gbinder /usr/include/gutil /usr/include/glib-2.0
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include /usr/lib/arm-linux-gnueabihf/glib-2.0/include /usr/lib/aarch64-linux-gnu/glib-2.0/include
+    LIBS += -lgbinder
 }
 
 include(../common-install.pri)
