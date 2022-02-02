@@ -2,7 +2,7 @@ TEMPLATE = subdirs
 
 include( ../common-config.pri )
 # split like this as Sailfish only installs hybris plugins
-contains(CONFIG,hybris) {
+contains(CONFIG,autohybris) {
     SUBDIRS = hybrisaccelerometer
     SUBDIRS += hybrisalsadaptor
     SUBDIRS += hybrisgyroscopeadaptor
