@@ -33,7 +33,7 @@
  * 165.8 is the result of a reference measurement.
  * We are going to correct it such that we get the correct acceleration in m/s^2
  */
-#define CORRECTION_FACTOR (165.8 / EARTH_GRAVITY)
+#define CORRECTION_FACTOR float(165.8 / EARTH_GRAVITY)
 
 Mpu6050AccelAdaptor::Mpu6050AccelAdaptor (const QString& id) :
     SysfsAdaptor (id, SysfsAdaptor::IntervalMode)
@@ -66,8 +66,11 @@ Mpu6050AccelAdaptor::Mpu6050AccelAdaptor (const QString& id) :
 
     setDescription("MPU 6050 accelerometer");
 //    introduceAvailableDataRange(DataRange(-16384, 16384, 1));
-//    introduceAvailableInterval(DataRange(10, 586, 0));
-//    setDefaultInterval(100);
+//    unsigned int min_interval_us =  10 * 1000;
+//    unsigned int max_interval_us = 586 * 1000;
+//    introduceAvailableInterval(DataRange(min_interval_us, max_interval_us, 0));
+//    unsigned int interval_us = 100 * 1000;
+//    setDefaultInterval(interval_us);
 }
 
 Mpu6050AccelAdaptor::~Mpu6050AccelAdaptor () {
@@ -78,13 +81,13 @@ bool Mpu6050AccelAdaptor::startSensor () {
     if ( !(SysfsAdaptor::startSensor ()) )
         return false;
 
-    sensordLogD() << "MPU6050 AccelAdaptor start\n";
+    sensordLogD() << id() << "MPU6050 AccelAdaptor start";
     return true;
 }
 
 void Mpu6050AccelAdaptor::stopSensor () {
     SysfsAdaptor::stopSensor();
-    sensordLogD() << "MPU6050 AccelAdaptor stop\n";
+    sensordLogD() << id() << "MPU6050 AccelAdaptor stop";
 }
 
 void Mpu6050AccelAdaptor::processSample (int pathId, int fd) {
@@ -92,18 +95,18 @@ void Mpu6050AccelAdaptor::processSample (int pathId, int fd) {
     int val;
 
     if ( pathId < X_AXIS || pathId > Z_AXIS ) {
-        sensordLogW() << "Wrong pathId: " << pathId;
+        sensordLogW() << id() << "Wrong pathId: " << pathId;
         return;
     }
 
     lseek (fd, 0, SEEK_SET);
     if (read (fd, buf, sizeof(buf)) < 0) {
-        sensordLogW() << "Read failed";
+        sensordLogW() << id() << "Read failed";
         return;
     }
 
     if (sscanf (buf, "%d", &val) == 0 ) {
-        sensordLogW() << "Wrong data format: " << buf;
+        sensordLogW() << id() << "Wrong data format: " << buf;
         return;
     }
 
@@ -111,18 +114,18 @@ void Mpu6050AccelAdaptor::processSample (int pathId, int fd) {
         case X_AXIS:
             currentData = buffer->nextSlot();                
             currentData->timestamp_ = Utils::getTimeStamp();
-            currentData->x_ = qRound(val / CORRECTION_FACTOR);
+            currentData->x_ = val / CORRECTION_FACTOR;
             break;
         case Y_AXIS:
-            currentData->y_ = qRound(val / CORRECTION_FACTOR);
+            currentData->y_ = val / CORRECTION_FACTOR;
             break;
         case Z_AXIS:
-            currentData->z_ = qRound(val / CORRECTION_FACTOR);
+            currentData->z_ = val / CORRECTION_FACTOR;
             buffer->commit();
             buffer->wakeUpReaders();
             break;
         default:
-            sensordLogW() << "Invalid pathId: " << pathId;
+            sensordLogW() << id() << "Invalid pathId: " << pathId;
             break;
     }
 }

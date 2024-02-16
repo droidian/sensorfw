@@ -13,11 +13,11 @@ SENSORFW_INCLUDEPATHS = .. \
 DEPENDPATH += $$SENSORFW_INCLUDEPATHS
 INCLUDEPATH += $$SENSORFW_INCLUDEPATHS
 
-QMAKE_LIBDIR_FLAGS += -lsensordatatypes-qt5
-
 SOURCES += hybrisadaptor.cpp
 HEADERS += hybrisadaptor.h
-LIBS += -L$$[QT_INSTALL_LIBS] -L../datatypes
+LIBS += -L$$[QT_INSTALL_LIBS] -L../datatypes -lsensordatatypes-qt$${QT_MAJOR_VERSION} -L. -lsensorfw-qt$${QT_MAJOR_VERSION}
+
+CONFIG += link_pkgconfig
 
 !contains(CONFIG,binder) {
     INCLUDEPATH += /usr/include/android

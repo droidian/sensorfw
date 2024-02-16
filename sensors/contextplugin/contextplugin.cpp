@@ -32,7 +32,7 @@ int ContextPlugin::sessionId = 0;
 
 void ContextPlugin::Register(class Loader&)
 {
-    sensordLogD() << "registering contextsensor";
+    sensordLogD() << id() << "registering contextsensor";
     SensorManager& sm = SensorManager::instance();
     sm.registerSensor<ContextSensorChannel>("contextsensor");
 }
@@ -43,7 +43,11 @@ void ContextPlugin::Init(class Loader&)
 }
 
 QStringList ContextPlugin::Dependencies() {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    return QString("accelerometeradaptor:orientationchain").split(":", Qt::SkipEmptyParts);
+#else
     return QString("accelerometeradaptor:orientationchain").split(":", QString::SkipEmptyParts);
+#endif
 }
 
 int ContextPlugin::getSessionId()

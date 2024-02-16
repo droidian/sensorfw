@@ -56,10 +56,10 @@ void GyroscopeAdaptor::processSample(int pathId, int fd)
     char buf[32];
 
     if (read(fd, buf, sizeof(buf)) <= 0) {
-        sensordLogW() << "read():" << strerror(errno);
+        sensordLogW() << id() << "read():" << strerror(errno);
         return;
     }
-    sensordLogT() << "gyroscope output value: " << buf;
+    sensordLogT() << id() << "gyroscope output value: " << buf;
 
     sscanf(buf, "%hd %hd %hd\n", &x, &y, &z);
 
@@ -70,14 +70,18 @@ void GyroscopeAdaptor::processSample(int pathId, int fd)
     gyroscopeBuffer_->wakeUpReaders();
 }
 
-bool GyroscopeAdaptor::setInterval(const unsigned int value, const int sessionId)
+bool GyroscopeAdaptor::setInterval(const int sessionId, const unsigned int interval_us)
 {
     if (mode() == SysfsAdaptor::IntervalMode)
-        return SysfsAdaptor::setInterval(value, sessionId);
+        return SysfsAdaptor::setInterval(sessionId, interval_us);
 
-    int rate = value==0?100:1000/value;
-    sensordLogD() << "Setting poll interval for " << dataRatePath_ << " to " << rate;
-    QByteArray dataRateString(QString("%1\n").arg(rate).toLocal8Bit());
+    int rate_Hz = 0;
+    if (interval_us > 0)
+        rate_Hz = 1000000 / interval_us;
+    if (rate_Hz <= 0)
+        rate_Hz = 100;
+    sensordLogD() << id() << "Setting poll interval for " << dataRatePath_ << " to " << rate_Hz;
+    QByteArray dataRateString(QString("%1\n").arg(rate_Hz).toLocal8Bit());
     return writeToFile(dataRatePath_, dataRateString);
 }
 
@@ -86,5 +90,7 @@ unsigned int GyroscopeAdaptor::interval() const
     if (mode() == SysfsAdaptor::IntervalMode)
         return SysfsAdaptor::interval();
     QByteArray byteArray = readFromFile(dataRatePath_);
-    return byteArray.size() > 0 ? byteArray.toInt() : 0;
+    int rate_Hz = byteArray.size() > 0 ? byteArray.toInt() : 0;
+    int interval_us = rate_Hz > 0 ? 1000000 / rate_Hz : 0;
+    return interval_us;
 }

@@ -26,8 +26,13 @@ OemtabletAccelAdaptor::OemtabletAccelAdaptor (const QString& id) :
 
     setDescription("OEM tablet accelerometer");
     introduceAvailableDataRange(DataRange(-256, 256, 1));
-    introduceAvailableInterval(DataRange(10, 586, 0));
-    setDefaultInterval(0);
+
+    unsigned int min_interval_us =  10 * 1000;
+    unsigned int max_interval_us = 586 * 1000;
+    introduceAvailableInterval(DataRange(min_interval_us, max_interval_us, 0));
+
+    // FIXME: what meaning zero default interval is supposed to have here?
+    // setDefaultInterval(0);
 }
 
 OemtabletAccelAdaptor::~OemtabletAccelAdaptor () {
@@ -38,13 +43,13 @@ bool OemtabletAccelAdaptor::startSensor () {
     if ( !(SysfsAdaptor::startSensor ()) )
         return false;
 
-    sensordLogD() << "OEM tablet AccelAdaptor start\n";
+    sensordLogD() << id() << "OEM tablet AccelAdaptor start";
     return true;
 }
 
 void OemtabletAccelAdaptor::stopSensor () {
     SysfsAdaptor::stopSensor();
-    sensordLogD() << "OEM tablet AccelAdaptor stop\n";
+    sensordLogD() << id() << "OEM tablet AccelAdaptor stop";
 }
 
 void OemtabletAccelAdaptor::processSample (int pathId, int fd) {

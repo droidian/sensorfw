@@ -30,7 +30,8 @@ HybrisAccelerometerAdaptor::HybrisAccelerometerAdaptor(const QString& id) :
 
     setDescription("Hybris accelerometer");
     powerStatePath = SensorFrameworkConfig::configuration()->value("accelerometer/powerstate_path").toByteArray();
-//    setDefaultInterval(50);
+//    unsigned int interval_us = 50 * 1000;
+//    setDefaultInterval(interval_us);
 }
 
 HybrisAccelerometerAdaptor::~HybrisAccelerometerAdaptor()
@@ -44,7 +45,7 @@ bool HybrisAccelerometerAdaptor::startSensor()
         return false;
     if (isRunning() && !powerStatePath.isEmpty())
         writeToFile(powerStatePath, "1");
-    sensordLogD() << "Hybris AccelAdaptor start\n";
+    sensordLogD() << id() << "Hybris AccelAdaptor start";
     return true;
 }
 
@@ -53,7 +54,7 @@ void HybrisAccelerometerAdaptor::stopSensor()
     HybrisAdaptor::stopSensor();
     if (!isRunning() && !powerStatePath.isEmpty())
         writeToFile(powerStatePath, "0");
-    sensordLogD() << "Hybris AccelAdaptor stop\n";
+    sensordLogD() << id() << "Hybris AccelAdaptor stop";
 }
 
 void HybrisAccelerometerAdaptor::processSample(const sensors_event_t& data)

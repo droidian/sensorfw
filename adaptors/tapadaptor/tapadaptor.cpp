@@ -64,7 +64,7 @@ void TapAdaptor::interpretEvent(int src, struct input_event *ev)
                 break;
             default:
                 dir = TapData::X;
-                sensordLogW() << "TapAdaptor: Unknown event-code received: " << ev->code;
+                sensordLogW() << id() << "TapAdaptor: Unknown event-code received: " << ev->code;
                 break;
         }
         TapData tapValue;
@@ -94,7 +94,9 @@ void TapAdaptor::commitOutput(const TapData& data)
     tapBuffer_->wakeUpReaders();
 }
 
-bool TapAdaptor::setInterval(const unsigned int, const int)
+bool TapAdaptor::setInterval(const int sessionId, const unsigned int interval_us)
 {
+    Q_UNUSED(sessionId);
+    Q_UNUSED(interval_us);
     return true;
 }

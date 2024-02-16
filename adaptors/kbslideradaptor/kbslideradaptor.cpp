@@ -88,7 +88,7 @@ void KeyboardSliderAdaptor::interpretSync(int src, struct input_event *ev)
 
 void KeyboardSliderAdaptor::commitOutput()
 {
-    sensordLogD() << "KB Slider state change detected: " << currentState_;
+    sensordLogD() << id() << "KB Slider state change detected: " << currentState_;
 
     KeyboardSliderState *state = kbstateBuffer_->nextSlot();
 
@@ -103,9 +103,9 @@ unsigned int KeyboardSliderAdaptor::interval() const
     return 0;
 }
 
-bool KeyboardSliderAdaptor::setInterval(unsigned int value, int sessionId)
+bool KeyboardSliderAdaptor::setInterval(int sessionId, unsigned int interval_us)
 {
-    Q_UNUSED(value);
+    Q_UNUSED(interval_us);
     Q_UNUSED(sessionId);
     return true;
 }

@@ -72,20 +72,20 @@ void OrientationBin::startRun()
     sessionId = SensorManager::instance().requestSensor("contextsensor");
     if (sessionId == INVALID_SESSION)
     {
-        sensordLogC() << "Failed to get unique id for orientation detection.";
+        sensordLogC() << id() << "Failed to get unique sessionId for orientation detection.";
     }
 
     orientationChain = SensorManager::instance().requestChain("orientationchain");
     if (!orientationChain)
     {
-        sensordLogC() << "Unable to access OrientationChain for orientation properties.";
+        sensordLogC() << id() << "Unable to access OrientationChain for orientation properties.";
         return;
     }
 
     RingBufferBase* rb = orientationChain->findBuffer("topedge");
     if (!rb)
     {
-        sensordLogC() << "Unable to connect to TopEdge orientation buffer.";
+        sensordLogC() << id() << "Unable to connect to TopEdge orientation buffer.";
     } else {
         rb->join(&topEdgeReader);
     }
@@ -93,7 +93,7 @@ void OrientationBin::startRun()
     rb = orientationChain->findBuffer("face");
     if (!rb)
     {
-        sensordLogC() << "Unable to connect to face orientation buffer.";
+        sensordLogC() << id() << "Unable to connect to face orientation buffer.";
     } else {
         rb->join(&faceReader);
     }
@@ -101,8 +101,9 @@ void OrientationBin::startRun()
     start();
     orientationChain->start();
 
-    unsigned int pollInterval = SensorFrameworkConfig::configuration()->value("context/orientation_poll_interval", QVariant(POLL_INTERVAL)).toUInt();
-    orientationChain->setIntervalRequest(sessionId, pollInterval);
+    unsigned int pollInterval_ms = SensorFrameworkConfig::configuration()->value("context/orientation_poll_interval", QVariant(POLL_INTERVAL)).toUInt();
+    unsigned int pollInterval_us = pollInterval_ms * 1000;
+    orientationChain->setIntervalRequest(sessionId, pollInterval_us);
 }
 
 void OrientationBin::stopRun()

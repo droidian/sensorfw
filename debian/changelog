@@ -1,3 +1,62 @@
+sensorfw-qt5 (0.14.4) unstable; urgency=medium
+
+  * [sensorfwd] Fix units used for sleep in sysfsadaptor. Fixes JB#60958
+  * [magcalibrationchain] Always substract offset regardless of calLevel
+
+ -- Matti Lehtimäki <matti.lehtimaki@jolla.com>  Wed, 05 Jul 2023 14:05:32 +0300
+
+sensorfw-qt5 (0.14.3) unstable; urgency=medium
+
+  * [sensorfwd] Use ms values for getAvailableIntervals() reply. Fixes JB#60583
+
+ -- Simo Piiroinen <simo.piiroinen@jolla.com>  Tue, 18 Apr 2023 15:33:32 +0300
+
+sensorfw-qt5 (0.14.2) unstable; urgency=medium
+
+  * [hybrisadaptor] Fix build errors from unresolvable id() calls. JB#60480
+
+ -- Simo Piiroinen <simo.piiroinen@jolla.com>  Thu, 06 Apr 2023 10:15:22 +0300
+
+sensorfw-qt5 (0.14.1) unstable; urgency=medium
+
+  * [sensorfwd] Add node id to diagnostic logging messages
+  * [hybrisadaptor] Define data and interval ranges earlier. JB#60480
+  * [hybrisadaptor] Silence als/ps initial value warnings. Fixes JB#60480
+
+ -- Simo Piiroinen <simo.piiroinen@jolla.com>  Thu, 06 Apr 2023 09:11:11 +0300
+
+sensorfw-qt5 (0.14.0) unstable; urgency=medium
+
+  * [tapadaptor] Silence unused parameter warnings
+  * [clientapitest] Move unit test operator== away from API header
+  * [sensorfwd] Use float values for XYZ data. Fixes JB#60407
+
+ -- Simo Piiroinen <simo.piiroinen@jolla.com>  Thu, 30 Mar 2023 18:35:56 +0300
+
+sensorfw-qt5 (0.13.0) unstable; urgency=medium
+
+  * [hybrisadaptor] Fix setDelay() return value
+  * [sensorfw] Normalize setInterval() parameter order. Fixes JB#60301
+  * [sensorfw] Explicitly indicate interval time units. JB#60313
+  * [sensorfw] Add setDataRate() D-Bus method. JB#60417
+  * [sensorfw] Handle intervals in microsecond granularity. Fixes JB#60313
+  * [sensorfw] Drop evaluateIntervalRequests overloading. JB#60314
+  * [nodebase] Use closest supported data rate. Fixes JB#60314
+  * [declinationfilter] Add unit suffixes to time values
+  * [nodebase] Remove dead code
+  * [nodebase] Use m_variableName convention for all members
+
+ -- Simo Piiroinen <simo.piiroinen@jolla.com>  Tue, 28 Mar 2023 11:43:04 +0300
+
+sensorfw-qt5 (0.12.7) unstable; urgency=medium
+
+  * [hybrisadaptor] Force cancellation of pending POLL transaction. JB#60298
+  * [hybrisadaptor] Read and process capped number of events. JB#60298
+  * [hybrisadaptor] Shuffle cleanup order. JB#60298
+  * [sendorfwd] Skip deadlocking libgbinder cleanup. Fixes JB#60298
+
+ -- Simo Piiroinen <simo.piiroinen@jolla.com>  Mon, 20 Mar 2023 08:47:28 +0200
+
 sensorfw-qt5 (0.12.6) unstable; urgency=medium
 
   * [sensorfw] Add support for sensor binder API 2

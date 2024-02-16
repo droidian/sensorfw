@@ -26,8 +26,13 @@ OaktrailAccelAdaptor::OaktrailAccelAdaptor (const QString& id) :
 
     setDescription("Oaktrail accelerometer");
     introduceAvailableDataRange(DataRange(-256, 256, 1));
-    introduceAvailableInterval(DataRange(10, 586, 0));
-    setDefaultInterval(100);
+
+    unsigned int min_interval_us =  10 * 1000;
+    unsigned int max_interval_us = 586 * 1000;
+    introduceAvailableInterval(DataRange(min_interval_us, max_interval_us, 0));
+
+    unsigned int interval_us = 100 * 1000;
+    setDefaultInterval(interval_us);
 }
 
 OaktrailAccelAdaptor::~OaktrailAccelAdaptor () {
@@ -38,13 +43,13 @@ bool OaktrailAccelAdaptor::startSensor () {
     if ( !(SysfsAdaptor::startSensor ()) )
         return false;
 
-    sensordLogD() << "Oaktrail AccelAdaptor start\n";
+    sensordLogD() << id() << "Oaktrail AccelAdaptor start";
     return true;
 }
 
 void OaktrailAccelAdaptor::stopSensor () {
     SysfsAdaptor::stopSensor();
-    sensordLogD() << "Oaktrail AccelAdaptor stop\n";
+    sensordLogD() << id() << "Oaktrail AccelAdaptor stop";
 }
 
 void OaktrailAccelAdaptor::processSample (int pathId, int fd) {

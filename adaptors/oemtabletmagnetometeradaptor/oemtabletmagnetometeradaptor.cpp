@@ -11,7 +11,7 @@ OemtabletMagnetometerAdaptor::OemtabletMagnetometerAdaptor(const QString& id) :
     devId(0)
 {
     if (access(SYSFS_MAGNET_PATH, R_OK) < 0) {
-        sensordLogW() << SYSFS_MAGNET_PATH << ": "<< strerror(errno);
+        sensordLogW() << id() << SYSFS_MAGNET_PATH << ": "<< strerror(errno);
         return;
     }
     addPath(SYSFS_MAGNET_PATH, devId);
@@ -20,8 +20,13 @@ OemtabletMagnetometerAdaptor::OemtabletMagnetometerAdaptor(const QString& id) :
 
     setDescription("OEM tablet magnetometer");
     introduceAvailableDataRange(DataRange(-2048, 2048, 1));
-    introduceAvailableInterval(DataRange(10, 556, 0));
-    setDefaultInterval(500);
+
+    unsigned int min_interval_us =  10 * 1000;
+    unsigned int max_interval_us = 556 * 1000;
+    introduceAvailableInterval(DataRange(min_interval_us, max_interval_us, 0));
+
+    unsigned int interval_us = 500 * 1000;
+    setDefaultInterval(interval_us);
 }
 
 OemtabletMagnetometerAdaptor::~OemtabletMagnetometerAdaptor()
@@ -34,15 +39,15 @@ void OemtabletMagnetometerAdaptor::processSample(int pathId, int fd)
     int x, y, z;
 
     if (pathId != devId) {
-        sensordLogW() << "pathId != devId";
+        sensordLogW() << id() << "pathId != devId";
         return;
     }
     lseek(fd, 0, SEEK_SET);
     if (read(fd, buf, sizeof(buf)) <= 0) {
-        sensordLogW() << "read():" << strerror(errno);
+        sensordLogW() << id() << "read():" << strerror(errno);
         return;
     }
-    sensordLogT() << "Magnetometer output value: " << buf;
+    sensordLogT() << id() << "Magnetometer output value: " << buf;
 
     sscanf(buf, "(%d,%d,%d)", &x, &y, &z);
 

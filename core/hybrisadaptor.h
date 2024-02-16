@@ -24,6 +24,7 @@
 #include <QThread>
 #include <QTimer>
 #include <QFile>
+#include <QSocketNotifier>
 
 #include "deviceadaptor.h"
 
@@ -139,9 +140,9 @@ struct HybrisSensorState
     HybrisSensorState();
     ~HybrisSensorState();
 
-    int  m_minDelay;
-    int  m_maxDelay;
-    int  m_delay;
+    int  m_minDelay_us;
+    int  m_maxDelay_us;
+    int  m_delay_us;
     int  m_active;
     sensors_event_t m_fallbackEvent;
 };
@@ -170,7 +171,7 @@ public:
     int              getMinDelay   (int handle) const;
     int              getMaxDelay   (int handle) const;
     int              getDelay      (int handle) const;
-    bool             setDelay      (int handle, int delay_ms, bool force);
+    bool             setDelay      (int handle, int delay_us, bool force);
     bool             getActive     (int handle) const;
     bool             setActive     (int handle, bool active);
 
@@ -186,7 +187,7 @@ public:
 private:
     // fields
     bool                          m_initialized;
-    QMap <int, HybrisAdaptor *>   m_registeredAdaptors; // type -> obj
+    QMultiMap <int, HybrisAdaptor *>   m_registeredAdaptors; // type -> obj
 
 #ifdef USE_BINDER
     // Binder backend
@@ -203,7 +204,11 @@ private:
 #else
     // HAL backend
     struct sensors_module_t      *m_halModule;
+#ifdef SENSORS_DEVICE_API_VERSION_1_0
+    sensors_poll_device_1_t      *m_halDevice;
+#else
     struct sensors_poll_device_t *m_halDevice;
+#endif
     const struct sensor_t        *m_sensorArray;   // [m_sensorCount]
 #endif
     pthread_t                     m_eventReaderTid;
@@ -211,6 +216,9 @@ private:
     HybrisSensorState            *m_sensorState;   // [m_sensorCount]
     QMap <int, int>               m_indexOfType;   // type   -> index
     QMap <int, int>               m_indexOfHandle; // handle -> index
+    int                           m_eventPipeReadFd;
+    int                           m_eventPipeWriteFd;
+    QSocketNotifier              *m_eventPipeNotifier;
 
 #ifdef USE_BINDER
     static GBinderLocalReply *sensorCallbackHandler(
@@ -236,8 +244,11 @@ private:
 private:
     static void *eventReaderThread(void *aptr);
     float scaleSensorValue(const float value, const int type) const;
-    void processEvents(const sensors_event_t *buffer,
-        int numberOfEvents, int &blockSuspend, bool &errorInInput);
+    void initEventPipe();
+    void cleanupEventPipe();
+    void eventPipeWakeup(int fd);
+    int queueEvents(const sensors_event_t *buffer, int numEvents);
+    int processEvents(const sensors_event_t *buffer, int numEvents);
 };
 
 class HybrisAdaptor : public DeviceAdaptor
@@ -274,8 +285,7 @@ protected:
     unsigned int maxInterval() const;
 
     virtual unsigned int interval() const;
-    virtual bool setInterval(const unsigned int value, const int sessionId);
-    virtual unsigned int evaluateIntervalRequests(int& sessionId) const;
+    virtual bool setInterval(const int sessionId, const unsigned int interval_us);
     static bool writeToFile(const QByteArray& path, const QByteArray& content);
 
 private:

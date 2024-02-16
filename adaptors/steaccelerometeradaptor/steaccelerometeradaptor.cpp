@@ -18,8 +18,10 @@ SteAccelAdaptor::SteAccelAdaptor(const QString& id) :
 {
     buffer = new DeviceAdaptorRingBuffer<OrientationData>(128);
     setAdaptedSensor("accelerometer", "ste accelerometer", buffer);
-    introduceAvailableInterval(DataRange(50, 1000, 0));
 
+    unsigned int min_interval_us =   50 * 1000;
+    unsigned int max_interval_us = 1000 * 1000;
+    introduceAvailableInterval(DataRange(min_interval_us, max_interval_us, 0));
 /*
 range
 0: +/- 2g (1 mg/LSB)
@@ -88,7 +90,7 @@ void SteAccelAdaptor::processSample(int pathId, int fd)
 
     lseek(fd, 0, SEEK_SET);
     if (read(fd, buf, sizeof(buf)) < 0 ) {
-        sensordLogW() << "Read failed";
+        sensordLogW() << id() << "Read failed";
         stopSensor();
         return;
     }

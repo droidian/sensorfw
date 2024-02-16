@@ -19,20 +19,20 @@ OEMTabletALSAdaptorAscii::OEMTabletALSAdaptorAscii(const QString& id) : SysfsAda
     QFile sysFile(SensorFrameworkConfig::configuration()->value("als-ascii_range_sysfs_path").toString());
 
     if (!(sysFile.open(QIODevice::ReadOnly))) {
-        sensordLogW() << "Unable to config ALS range from sysfs, using default value: " << DEFAULT_RANGE;
+        sensordLogW() << id() << "Unable to config ALS range from sysfs, using default value: " << DEFAULT_RANGE;
     } else {
         sysFile.readLine(buf, sizeof(buf));
         range = QString(buf).toInt();
     }
 
-    sensordLogT() << "Ambient light range: " << range;
+    sensordLogT() << id() << "Ambient light range: " << range;
 
     // Locate the actual handle
     QString devPath = SensorFrameworkConfig::configuration()->value("als-ascii_sysfs_path").toString();
 
     if (devPath.isEmpty())
     {
-        sensordLogW() << "No driver handle found for ALS. Data not available.";
+        sensordLogW() << id() << "No driver handle found for ALS. Data not available.";
         return;
     }
 
@@ -42,8 +42,13 @@ OEMTabletALSAdaptorAscii::OEMTabletALSAdaptorAscii(const QString& id) : SysfsAda
 
     setDescription("Ambient light");
     introduceAvailableDataRange(DataRange(0, range, 1));
-    introduceAvailableInterval(DataRange(10, 98, 0));
-    setDefaultInterval(90);
+
+    unsigned int min_interval_us = 10 * 1000;
+    unsigned int max_interval_us = 98 * 1000;
+    introduceAvailableInterval(DataRange(min_interval_us, max_interval_us, 0));
+
+    unsigned int interval_us = 90 * 1000;
+    setDefaultInterval(interval_us);
 }
 
 OEMTabletALSAdaptorAscii::~OEMTabletALSAdaptorAscii()
@@ -55,12 +60,12 @@ void OEMTabletALSAdaptorAscii::processSample(int pathId, int fd) {
     Q_UNUSED(pathId);
 
     if (read(fd, buf, sizeof(buf)) <= 0) {
-        sensordLogW() << "read():" << strerror(errno);
+        sensordLogW() << id() << "read():" << strerror(errno);
         return;
     }
     buf[sizeof(buf)-1] = '\0';
 
-    sensordLogT() << "Ambient light value: " << buf;
+    sensordLogT() << id() << "Ambient light value: " << buf;
 
     __u16 idata = atoi(buf);
 
