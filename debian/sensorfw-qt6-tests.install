@@ -3,8 +3,8 @@
 /usr/share/sensorfw-tests/sensord-deadclienttest.py
 /usr/bin/sensor*-test
 /usr/bin/sensord-deadclient
-/usr/bin/sensordummyclient-qt5
-/usr/lib/*/sensord-qt5/testing/*
+/usr/bin/sensordummyclient-qt6
+/usr/lib/*/sensord-qt6/testing/*
 /usr/bin/sensortestapp
-/usr/bin/datafaker-qt5
+/usr/bin/datafaker-qt6
 /usr/bin/sensordiverter.sh

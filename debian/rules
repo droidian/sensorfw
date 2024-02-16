@@ -11,7 +11,7 @@ space:= $(empty) $(empty)
 # project specific
 PROJECT_NAME:= sensorfw
 BUILD_DIR:= builddir
-PACKAGE_NAME:= sensorfw-qt5
+PACKAGE_NAME:= sensorfw-qt6
 
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
@@ -50,8 +50,8 @@ configure-stamp: builddir
 	dh_testdir
 
 	# Add here commands to configure the package.
-	cd $(BUILD_DIR) && qmake $(QMAKECONFIG) CONFIG+="configs" CONFIG+="autohybris" CONFIG+="binder" CONFIG+="systemdunit" "QMAKE_CXXFLAGS=$(CFLAGS)" "MAKE_DOCS=$(MAKE_DOCS)" ../$(PROJECT_NAME).pro
-	export LD_RUN_PATH=/usr/lib/sensord-qt5/
+	cd $(BUILD_DIR) && qmake6 $(QMAKECONFIG) CONFIG+="configs" CONFIG+="autohybris" CONFIG+="binder" CONFIG+="systemdunit" "QMAKE_CXXFLAGS=$(CFLAGS)" "MAKE_DOCS=$(MAKE_DOCS)" ../$(PROJECT_NAME).pro
+	export LD_RUN_PATH=/usr/lib/sensord-qt6/
 
 	touch configure-stamp
 
@@ -62,8 +62,8 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	sed "s|@LIB@|lib/$(DEB_HOST_MULTIARCH)|g" $(CURDIR)/sensord-qt5.pc.in > $(CURDIR)/sensord-qt5.pc
-	sed "s|@LIBDIR@/sensord|/usr/lib/$(DEB_HOST_MULTIARCH)/sensord-qt5|g" $(CURDIR)/tests/tests.xml.in > $(CURDIR)/tests/tests.xml
+	sed "s|@LIB@|lib/$(DEB_HOST_MULTIARCH)|g" $(CURDIR)/sensord-qt6.pc.in > $(CURDIR)/sensord-qt6.pc
+	sed "s|@LIBDIR@/sensord|/usr/lib/$(DEB_HOST_MULTIARCH)/sensord-qt6|g" $(CURDIR)/tests/tests.xml.in > $(CURDIR)/tests/tests.xml
 	cd $(BUILD_DIR) && $(MAKE) $(MAKE_PARALLEL_PARAMS)
 
 	touch $@
@@ -77,7 +77,7 @@ clean:
 	rm -r -f $(BUILD_DIR)
 	rm -f -r debian/tmp
 
-	rm -f $(CURDIR)/sensord-qt5.pc $(CURDIR)/tests/tests.xml
+	rm -f $(CURDIR)/sensord-qt6.pc $(CURDIR)/tests/tests.xml
 
 	dh_clean
 
@@ -90,8 +90,8 @@ install: build
 	# Add here commands to install the package into debian/tmp.
 	cd $(BUILD_DIR) && $(MAKE) INSTALL_ROOT=$(CURDIR)/debian/tmp $(MAKE_PARALLEL_PARAMS) install
 	# Workaround a qmake issue experienced on arch-dep builds
-	/usr/lib/qt5/bin/qmake -install qinstall \
-		$(CURDIR)/sensord-qt5.pc $(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/sensord-qt5.pc
+	/usr/lib/qt6/bin/qmake6 -install qinstall \
+		$(CURDIR)/sensord-qt6.pc $(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/sensord-qt6.pc
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -108,7 +108,7 @@ binary-arch: build install
 	dh_strip --dbg-package=$(PACKAGE_NAME)-dbg
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs --exclude=/usr/lib/sensord-qt5
+	dh_makeshlibs --exclude=/usr/lib/sensord-qt6
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

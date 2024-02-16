@@ -1,10 +1,10 @@
-Source: sensorfw-qt5
+Source: sensorfw-qt6
 Section: misc
 Priority: optional
 Maintainer: Lorn Potter <lorn.potter@gmail.com>
 Uploaders: 
 Build-Depends: debhelper (>=5),
-               qtbase5-dev,
+               qt6-base-dev,
                libudev-dev,
                libsystemd-dev,
                doxygen,
@@ -19,62 +19,134 @@ Build-Depends: debhelper (>=5),
                libgbinder-dev
 Standards-Version: 3.7.3
 
-Package: sensorfw-qt5
+Package: sensorfw-qt6
 Section: misc
 Priority: extra
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libsensorfw-qt5-configs
+Depends: ${shlibs:Depends}, ${misc:Depends}, libsensorfw-qt6-configs
+Breaks: sensorfw-qt5 (<< ${binary:Version})
+Replaces: sensorfw-qt5 (<< ${binary:Version})
 Description: Sensor framework daemon
  Provides sensor framework daemon and required libraries
 
-Package: libsensorfw-qt5-plugins
+Package: libsensorfw-qt6-plugins
 Section: misc
 Priority: extra
 Architecture: any
-Depends: sensorfw-qt5 (= ${binary:Version}), ${misc:Depends}, libqt5core5a, udev
+Depends: sensorfw-qt6 (= ${binary:Version}), ${misc:Depends}, udev
+Breaks: libsensorfw-qt5-plugins (<< ${binary:Version})
+Replaces: libsensorfw-qt5-plugins (<< ${binary:Version})
 Description: Sensor framework daemon and libraries plugins
  Platform plugins for sensorfw.
 
-Package: sensorfw-qt5-dbg
+Package: sensorfw-qt6-dbg
 Section: misc
 Priority: extra
 Architecture: any
-Depends: sensorfw-qt5 (= ${binary:Version}), ${misc:Depends}
+Depends: sensorfw-qt6 (= ${binary:Version}), ${misc:Depends}
+Breaks: sensorfw-qt5-dbg (<< ${binary:Version})
+Replaces: sensorfw-qt5-dbg (<< ${binary:Version})
 Description: Sensor framework daemon and libraries debug symbols
  Debug symbols for sensor framework daemon and libraries.
 
-Package: libsensorfw-qt5-dev
+Package: libsensorfw-qt6-dev
 Section: libdevel
 Priority: extra
 Architecture: any
-Depends: qt5-default, sensorfw-qt5 (= ${binary:Version})
+Depends: sensorfw-qt6 (= ${binary:Version})
+Breaks: libsensorfw-qt5-dev (<< ${binary:Version})
+Replaces: libsensorfw-qt5-dev (<< ${binary:Version})
 Description: Sensor framework daemon libraries development headers
  Development headers for sensor framework daemon and libraries.
 
-Package: libsensorfw-qt5-doc
+Package: libsensorfw-qt6-doc
 Section: doc
 Architecture: all
 Priority: optional
+Breaks: libsensorfw-qt5-doc (<< ${binary:Version})
+Replaces: libsensorfw-qt5-doc (<< ${binary:Version})
 Description: API documentation for libsensorfw
  Doxygen-generated API documentation for sensorfw.
 
-Package: sensorfw-qt5-tests
+Package: sensorfw-qt6-tests
 Section: tests
 Architecture: any
-Depends: libqt5test5, sensorfw-qt5 (= ${binary:Version}), rsyslog, python2, ${shlibs:Depends}
+Depends: sensorfw-qt6 (= ${binary:Version}), rsyslog, python2, ${shlibs:Depends}
+Breaks: sensorfw-qt5-tests (<< ${binary:Version})
+Replaces: sensorfw-qt5-tests (<< ${binary:Version})
 Description: Unit test cases for sensorfw
 
-Package: libsensorfw-qt5-hybris
+Package: libsensorfw-qt6-hybris
 Section: misc
 Priority: extra
 Architecture: any
-Depends: sensorfw-qt5 (= ${binary:Version}), libqt5core5a, libhardware2
+Depends: sensorfw-qt6 (= ${binary:Version}), libhardware2
+Breaks: libsensorfw-qt5-hybris (<< ${binary:Version})
+Replaces: libsensorfw-qt5-hybris (<< ${binary:Version})
 Description: Sensor framework hybris support
  Provides support for hybris Sensor framework backend.
 
-Package: libsensorfw-qt5-configs
+Package: libsensorfw-qt6-configs
 Section: misc
 Priority: extra
 Architecture: any
+Breaks: libsensorfw-qt5-configs (<< ${binary:Version})
+Replaces: libsensorfw-qt5-configs (<< ${binary:Version})
 Description: Sensor framework hybris support
  Provides support for hybris Sensor framework backend.
+
+Package: sensorfw-qt5
+Architecture: all
+Depends: sensorfw-qt6
+Description: Sensor framework daemon - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: libsensorfw-qt5-plugins
+Architecture: all
+Depends: libsensorfw-qt6-plugins
+Description: Sensor framework daemon - plugins - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: sensorfw-qt5-dbg
+Architecture: all
+Depends: sensorfw-qt6-dbg
+Description: Sensor framework daemon - debug symbols - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: libsensorfw-qt5-dev
+Architecture: all
+Depends: libsensorfw-qt6-dev
+Description: Sensor framework daemon - development headers - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: libsensorfw-qt5-doc
+Architecture: all
+Depends: libsensorfw-qt6-doc
+Description: Sensor framework daemon - documentation - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: sensorfw-qt5-tests
+Architecture: all
+Depends: sensorfw-qt6-tests
+Description: Sensor framework daemon - tests - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: libsensorfw-qt5-hybris
+Architecture: all
+Depends: libsensorfw-qt6-hybris
+Description: Sensor framework daemon - hybris support - transitional package
+ This package is a transitional package. Feel free to
+ remove it.
+
+Package: libsensorfw-qt5-configs
+Architecture: all
+Depends: libsensorfw-qt6-configs
+Description: Sensor framework daemon - configuration - transitional package
+ This package is a transitional package. Feel free to
+ remove it.

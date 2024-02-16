@@ -1,4 +1,4 @@
 /usr/lib/*/libhybrissensorfw*.so.*
 /usr/lib/*/libhybrissensorfw*.so
-/usr/lib/*/sensord-qt5/libhybris*.so
+/usr/lib/*/sensord-qt6/libhybris*.so
 ../../rpm/sensorfwd-hybris-dropin.conf /lib/systemd/system/sensorfwd.service.d/
