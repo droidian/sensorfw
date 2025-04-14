@@ -17,3 +17,9 @@
 /usr/lib/*/sensord-qt6/librotationfilter-qt6.so          
 /usr/lib/*/sensord-qt6/libdeclinationfilter-qt6.so      
 /usr/lib/*/sensord-qt6/librotationsensor-qt6.so
+/usr/lib/*/sensord-qt6/libhumiditysensor-qt6.so
+/usr/lib/*/sensord-qt6/liblidsensor-qt6.so
+/usr/lib/*/sensord-qt6/libmagcoordinatealignfilter-qt6.so
+/usr/lib/*/sensord-qt6/libpressuresensor-qt6.so
+/usr/lib/*/sensord-qt6/libstepcountersensor-qt6.so
+/usr/lib/*/sensord-qt6/libtemperaturesensor-qt6.so
