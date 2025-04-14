@@ -104,6 +104,7 @@ binary-arch: build install
 	dh_installchangelogs
 	dh_installdocs
 	dh_install --sourcedir=debian/tmp
+	dh_missing --list-missing
 	dh_link
 	dh_strip --dbg-package=$(PACKAGE_NAME)-dbg
 	dh_compress
